@@ -1,0 +1,3 @@
+Usage: `./quote [filepath] [loan_amount]`
+
+Example: `./quote spec/market.csv 1000`
