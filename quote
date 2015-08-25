@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+require_relative 'lib/table_loan'
+require_relative 'lib/quote_calculator'
+
+filepath, amount = ARGV[0], ARGV[1]
+
+calc = QuoteCalculator.new(filepath)
+quote = calc.quote(amount)
+
+p "Requested amount: £#{quote[:request]}"
+p "Rate: #{quote[:rate_pct]}%"
+p "Monthly repayment: £#{quote[:monthly_payment]}"
+p "Total repayment: £#{quote[:total_payment]}"
