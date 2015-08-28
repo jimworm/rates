@@ -28,20 +28,20 @@ class QuoteCalculator
     
     { request: principle.to_i,
       term: term,
-      rate_pct: (approximate_rate(principle, loans) * 100).to_f.round(1),
+      rate_pct: (approximate_rate(principle, loans, term) * 100).to_f.round(1),
       monthly_payment: loans.map(&:monthly_payment).reduce(:+).to_f,
       total_payment: loans.map(&:total_payment).reduce(:+).to_f.round(2) }
   end
   
   private
-  def approximate_rate(principle, loans)
+  def approximate_rate(principle, loans, term)
     true_monthly_payment = loans.map(&:monthly_payment).reduce(:+)
     hi, lo = loans.max_by(&:apr).apr, 0
     current_guess = lo + ((hi - lo) / 2) # in case hi is 0.001 or below
     
     while (hi - lo) > 0.001
       current_guess = lo + ((hi - lo) / 2)
-      current_loan = TableLoan.new(current_guess, principle, TERM)
+      current_loan = TableLoan.new(current_guess, principle, term)
       
       if current_loan.monthly_payment > true_monthly_payment
         hi = current_guess
